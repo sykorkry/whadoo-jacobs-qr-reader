@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <title>Instascan</title>
+   <script type="text/javascript" src="instascan.min.js"></script>
+   <script src="jquery.min.js"></script>
+
+ </head>
+ <body>
+   <video id="preview"></video>
+   <script type="text/javascript">
+     var scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+     var bool;
+     
+     scanner.addListener('scan', function (content, image) {
+     jQuery.get("http://35.242.251.171:8080/checkToken?token="+ content,function(data){
+          bool = data.result;
+          if(bool) {
+              $.get("http://192.168.43.171/open");
+              setTimeout(function(){$.get("http://192.168.43.171/close");},10000);
+          } else {
+              $.get("http://192.168.43.171/close");
+          }
+     });
+     console.log(content);
+     
+     });
+
+     Instascan.Camera.getCameras().then(function (cameras) {
+       if (cameras.length > 0) {
+         scanner.start(cameras[0]);
+       }
+     });
+   </script>
+ </body>
+</html>

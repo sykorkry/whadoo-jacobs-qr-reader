@@ -1,0 +1,1 @@
+# whadoo-jacobs-qr-reader
